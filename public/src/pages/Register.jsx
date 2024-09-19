@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from 'axios'
+import axios from "axios";
 
 import Logo from "../assets/React-Replies-logo.webp";
 import { registerRoute } from "../utils/APIRoutes";
 
-
 export default function Register() {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -19,15 +19,22 @@ export default function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if(handleValidation()){
-      console.log('Hello')
-      const { password, confirmPassword, username, email } = values;
-      const {data}=await axios.post(registerRoute, {
+    if (handleValidation()) {
+      const { password, username, email } = values;
+      const { data } = await axios.post(registerRoute, {
         username,
         email,
-        password
-      })
+        password,
+      });
 
+      if (data.status === false) {
+        toast.error(data.msg, toastOptions);
+      }
+      if (data.status === true) {
+        localStorage.setItem("react-replies-user", JSON.stringify(data.user));
+      }
+
+      navigate("/");
     }
   };
 
@@ -46,25 +53,17 @@ export default function Register() {
         "password and confirm password should be the same.",
         toastOptions
       );
-      return false
-    }
-    else if (username.length<3){
-      toast.error(
-        "Username should be longer than 3 characters", toastOptions
-      )
-      return false
-    }
-    else if (password.length<7){
-      toast.error(
-        "Password should be longer than 7 characters", toastOptions
-      )
-      return false
-    }
-    else if (email===''){
-      toast.error('Email is required', toastOptions)
-      return false
-    }
-    else return true
+      return false;
+    } else if (username.length < 3) {
+      toast.error("Username should be longer than 3 characters", toastOptions);
+      return false;
+    } else if (password.length < 7) {
+      toast.error("Password should be longer than 7 characters", toastOptions);
+      return false;
+    } else if (email === "") {
+      toast.error("Email is required", toastOptions);
+      return false;
+    } else return true;
   };
 
   const handleChange = (event) => {
