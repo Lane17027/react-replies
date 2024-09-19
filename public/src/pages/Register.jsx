@@ -17,6 +17,12 @@ export default function Register() {
     confirmPassword: "",
   });
 
+  useEffect(()=> {
+    if(localStorage.getItem('react-replies-user')){
+      navigate('/')
+    }
+  },[])
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {

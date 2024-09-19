@@ -12,9 +12,22 @@ export default function Login() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
-
     password: "",
   });
+
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+
+  useEffect(()=> {
+    if(localStorage.getItem('react-replies-user')){
+      navigate('/')
+    }
+  },[])
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,13 +48,7 @@ export default function Login() {
     }
   };
 
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
+
 
   const handleValidation = () => {
     const { password, username } = values;
