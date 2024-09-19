@@ -32,9 +32,8 @@ export default function Register() {
       }
       if (data.status === true) {
         localStorage.setItem("react-replies-user", JSON.stringify(data.user));
+        navigate("/");
       }
-
-      navigate("/");
     }
   };
 
