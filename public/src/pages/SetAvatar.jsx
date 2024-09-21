@@ -71,6 +71,7 @@ export default function SetAvatar() {
             );
           })}
         </div>
+        <button className="submit-btn" onClick={setProfilePicture()}>Set as Profile Picture</button>
       </Container>
       <ToastContainer />
     </>
@@ -96,6 +97,7 @@ const Container = styled.div`
     }
   }
 
+
   .avatars {
     display: flex;
     gap: 2rem;
@@ -120,5 +122,21 @@ const Container = styled.div`
     // I turned off selected because I think hover looks nicer
 
     //   }
+
+
   }
+    .submit-btn{
+      background-color: #997af0;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 0.4rem;
+      font-size: 1rem;
+      text-transform: uppercase;
+      transition: 0.5s ease-in-out;
+      &:hover {
+        background-color: #4e0eff;
+      }
 `;
