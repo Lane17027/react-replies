@@ -6,13 +6,9 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import loader from "../assets/loading-screen.gif";
 import { Buffer } from "buffer";
-// return (
-//     <img src={loader} alt="My GIF" />
-//   )
 import { setAvatarRoute } from "../utils/APIRoutes";
 
 export default function SetAvatar() {
-  //   const api = `https://api.multiavatar.com/${Math.round(Math.random() * 1000)}?apikey=LbWfgx0Oj7mvQn`;
   const navigate = useNavigate();
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +20,27 @@ export default function SetAvatar() {
     draggable: true,
     theme: "dark",
   };
-  const setProfilePicture = async () => {};
+
+  const setProfilePicture = async () => {
+    if (selectedAvatar === undefined) {
+      toast.error("Please select an avatar", toastOptions);
+    } else {
+      const user = await JSON.parse(localStorage.getItem("react-replies-user"));
+      const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
+        image: avatars[selectedAvatar],
+      });
+
+      if (data.isSet) {
+        user.isAvatarImageSet = true;
+        user.avatarImage = data.image;
+        localStorage.setItem("react-replies-user", JSON.stringify(user));
+        navigate("/");
+      } else {
+        toast.error("Error setting avatar, please try again");
+      }
+    }
+  };
+
   useEffect(() => {
     const data = [];
     const fetchAvatar = async () => {
@@ -35,44 +51,49 @@ export default function SetAvatar() {
           )}?apikey=LbWfgx0Oj7mvQn`
         );
 
-        console.log(image);
         const buffer = Buffer.from(image.data);
         data.push(buffer.toString("base64"));
-        console.log(data);
       }
       setAvatars(data);
+      setIsLoading(false);
     };
     fetchAvatar();
-
-    setIsLoading(false);
   }, []);
 
   return (
     <>
-      <Container>
-        <div className="title-container">
-          <h1>Pick an avatar as your profile picture</h1>
-        </div>
-        <div className="avatars">
-          {avatars.map((avatar, index) => {
-            return (
-              <div
-                key={index}
-                className={`avatar ${
-                  selectedAvatar === index ? "selected" : " "
-                }`}
-              >
-                <img
-                  src={`data:image/svg+xml;base64,${avatar}`}
-                  alt="avatar"
-                  onClick={() => setSelectedAvatar(index)}
-                />
-              </div>
-            );
-          })}
-        </div>
-        <button className="submit-btn" onClick={setProfilePicture()}>Set as Profile Picture</button>
-      </Container>
+      {isLoading ? (
+        <Container>
+          <img src={loader} alt="loader" className="loader" />
+        </Container>
+      ) : (
+        <Container>
+          <div className="title-container">
+            <h1>Pick an avatar as your profile picture</h1>
+          </div>
+          <div className="avatars">
+            {avatars.map((avatar, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`avatar ${
+                    selectedAvatar === index ? "selected" : ""
+                  }`} // No extra space
+                >
+                  <img
+                    src={`data:image/svg+xml;base64,${avatar}`}
+                    alt="avatar"
+                    onClick={() => setSelectedAvatar(index)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <button className="submit-btn" onClick={setProfilePicture}>
+            Set as Profile Picture
+          </button>
+        </Container>
+      )}
       <ToastContainer />
     </>
   );
@@ -97,7 +118,6 @@ const Container = styled.div`
     }
   }
 
-
   .avatars {
     display: flex;
     gap: 2rem;
@@ -113,30 +133,31 @@ const Container = styled.div`
       img {
         height: 6rem;
       }
+
       &:hover {
         border: 0.4rem solid #4e0eff;
       }
-    }
-    //   .selected{
-    //   border:0.4rem solid #4e0eff
-    // I turned off selected because I think hover looks nicer
 
-    //   }
-
-
-  }
-    .submit-btn{
-      background-color: #997af0;
-      color: white;
-      padding: 1rem 2rem;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 0.4rem;
-      font-size: 1rem;
-      text-transform: uppercase;
-      transition: 0.5s ease-in-out;
-      &:hover {
-        background-color: #4e0eff;
+      &.selected {
+        border: 0.4rem solid green; // Selected avatar border
       }
+    }
+  }
+
+  .submit-btn {
+    background-color: #997af0;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: 0.5s ease-in-out;
+
+    &:hover {
+      background-color: #4e0eff;
+    }
+  }
 `;

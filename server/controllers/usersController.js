@@ -32,7 +32,7 @@ module.exports.login = async (req, res, next) => {
     const { username, password } = req.body;
 
     const user = await User.findOne({ username });
-    console.log(user)
+    console.log(user);
     if (!user) {
       return res.json({ msg: "Incorrect username or password", status: false });
     }
@@ -43,6 +43,23 @@ module.exports.login = async (req, res, next) => {
     delete user.password;
 
     return res.json({ status: true, user });
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+module.exports.setAvatar = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const avatarImage = req.body.image;
+    const userData = await User.findByIdAndUpdate(userId, {
+      isAvatarImageSet: true,
+      avatarImage,
+    });
+    return res.json({
+      isSet: userData.isAvatarImageSet,
+      image: userData.avatarImage,
+    });
   } catch (ex) {
     next(ex);
   }
