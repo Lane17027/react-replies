@@ -20,12 +20,15 @@ export default function SetAvatar() {
     draggable: true,
     theme: "dark",
   };
-  useEffect(()=> {
-    if(!localStorage.getItem('react-replies-user')){
-      navigate('/login')
-    }
-  },[])
+  useEffect(() => {
+    const checkLocalStorage = async () => {
+      if (!localStorage.getItem("react-replies-user")) {
+        navigate("/login");
+      }
+    };
 
+    checkLocalStorage();
+  }, []);
 
   const setProfilePicture = async () => {
     if (selectedAvatar === undefined) {

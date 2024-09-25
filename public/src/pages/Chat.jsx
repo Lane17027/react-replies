@@ -1,13 +1,48 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { allUsersRoute } from "../utils/APIRoutes";
+import Contacts from "../components/Contacts";
 
 export default function Chat() {
+  const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
-  useEffect(() => {}, []);
+  const [currentUser, setCurrentUser] = useState(undefined);
+  //make useEffect async
+  useEffect(() => {
+    const checkLocalStorage = async () => {
+      if (!localStorage.getItem("react-replies-user")) {
+        navigate("/login");
+      } else {
+        setCurrentUser(
+          await JSON.parse(localStorage.getItem("react-replies-user"))
+        );
+      }
+    };
+
+    checkLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      if (currentUser) {
+        if (currentUser.isAvatarImageSet) {
+          const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+          setContacts(data.data);
+        } else {
+          navigate("/setAvatar");
+        }
+      }
+    };
+
+    checkUser();
+  }, [currentUser]);
   return (
     <Container>
-      <div className="container">Hi</div>
+      <div className="container">
+        <Contacts contacts={contacts}/>
+      </div>
     </Container>
   );
 }
