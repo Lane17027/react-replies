@@ -4,11 +4,13 @@ import styled from "styled-components";
 import axios from "axios";
 import { allUsersRoute } from "../utils/APIRoutes";
 import Contacts from "../components/Contacts";
+import Welcome from "../components/Welcome";
 
 export default function Chat() {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentChat, setCurrentChat] = useState(undefined);
   //make useEffect async
   useEffect(() => {
     const checkLocalStorage = async () => {
@@ -38,10 +40,18 @@ export default function Chat() {
 
     checkUser();
   }, [currentUser]);
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  };
   return (
     <Container>
       <div className="container">
-        <Contacts contacts={contacts}/>
+        <Contacts
+          contacts={contacts}
+          currentUser={currentUser}
+          changeChat={handleChatChange}
+        />
+        <Welcome currentUser={currentUser}/>
       </div>
     </Container>
   );
