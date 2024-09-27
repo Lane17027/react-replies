@@ -18,7 +18,7 @@ export default function ChatContainer({ currentChat }) {
                 <h3>{currentChat.username}</h3>
               </div>
             </div>
-            <Logout/>
+            <Logout />
           </div>
           <div className="chat-messages"></div>
           <div className="chat-input"></div>
@@ -33,7 +33,7 @@ const Container = styled.div`
   .chat-header {
     display: flex;
     justify-content: space-between;
-    align-items: cetner;
+    align-items: center;
     padding: 0 2rem;
     .user-details {
       display: flex;
@@ -46,9 +46,7 @@ const Container = styled.div`
       }
       .username {
         h3 {
-        color: white;
-
-
+          color: white;
         }
       }
     }
