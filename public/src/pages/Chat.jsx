@@ -7,6 +7,7 @@ import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
 
+
 export default function Chat() {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
