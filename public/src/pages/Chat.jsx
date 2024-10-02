@@ -7,7 +7,6 @@ import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
 
-
 export default function Chat() {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
@@ -56,7 +55,7 @@ export default function Chat() {
         {currentChat === undefined ? (
           <Welcome currentUser={currentUser} />
         ) : (
-          <ChatContainer currentChat={currentChat} />
+          <ChatContainer currentChat={currentChat} currentUser={currentUser} />
         )}
       </div>
     </Container>
