@@ -3,22 +3,21 @@ import styled from "styled-components";
 import Logout from "./Logout";
 import ChatInput from "./ChatInput";
 import axios from "axios";
-import {v4 as uuidv4} from "uuid"
+import { v4 as uuidv4 } from "uuid";
 import { getAllMessagesRoute, sendMessageRoute } from "../utils/APIRoutes";
 export default function ChatContainer({ currentChat, currentUser, socket }) {
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const scrollRef=useRef()
+  const scrollRef = useRef();
 
   useEffect(() => {
     const getMessages = async () => {
-      if (currentChat){
+      if (currentChat) {
         const response = await axios.post(getAllMessagesRoute, {
           from: currentUser._id,
           to: currentChat._id,
         });
         setMessages(response.data);
-
       }
     };
 
@@ -56,9 +55,11 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage]);
 
-  // useEffect(() => {
-  //   scrollRef.current.scrollIntoView({ behavior: "smooth" });
-  // }, [messages]);
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
   return (
     <>
       {currentChat && (
@@ -101,6 +102,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
 
 const Container = styled.div`
   padding-top: 1rem;
+  height: 90vh;
   display: grid;
   gap: 0.1rem;
   over-flow: hidden;
@@ -135,6 +137,15 @@ const Container = styled.div`
     flex-direction: column;
     gap: 1rem;
     overflow: auto;
+    &:: -webkit-scrollbar {
+      width: 0.2rem;
+      &-thumb {
+        background-color: #ffffff39;
+        width: 0.1rem;
+        border-radius: 1rem;
+      }
+    }
+    height: 100%;
     .message {
       display: flex;
       align-items: center;
