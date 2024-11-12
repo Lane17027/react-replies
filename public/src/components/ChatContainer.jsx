@@ -40,16 +40,30 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
     setMessages(msgs);
   };
 
+  // useEffect(() => {
+  //   if (socket.current) {
+  //     socket.current.on("msg-receive", (msg) => {
+  //       setArrivalMessage({
+  //         fromSelf: false,
+  //         message: msg,
+  //       });
+  //     });
+  //   }
+  // }, []);
   useEffect(() => {
     if (socket.current) {
-      socket.current.on("msg-receive", (msg) => {
+      const handleMessageReceive = (msg) => {
         setArrivalMessage({
           fromSelf: false,
           message: msg,
         });
-      });
+      };
+
+      socket.current.on("msg-receive", handleMessageReceive);
+
+      return () => socket.current.off("msg-receive", handleMessageReceive);
     }
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
@@ -80,7 +94,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
           </div>
           <div className="chat-messages">
             {messages.map((message, index) => (
-              <div ref={scrollRef} key={uuidv4}>
+              <div ref={scrollRef} key={index}>
                 <div
                   className={`message ${
                     message.fromSelf ? "sended" : "received"
