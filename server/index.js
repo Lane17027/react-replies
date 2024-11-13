@@ -39,15 +39,17 @@ mongoose
     console.log(`Server Started on Port ${process.env.PORT || 5000}`);
   });
 
-const io = socket(server, {
-  cors: {
-    origin: [
-      "http://localhost:3000", // Local Development
-      "https://react-replies.onrender.com", // Deployed Frontend
-    ],
-    credentials: true,
-  },
-});
+// const io = socket(server, {
+//   cors: {
+//     origin: [
+//       "http://localhost:3000", // Local Development
+//       "https://react-replies.onrender.com", // Deployed Frontend
+//     ],
+//     credentials: true,
+//   },
+// });
+
+const io = socket(server);
 
 global.onlineUsers = new Map();
 
