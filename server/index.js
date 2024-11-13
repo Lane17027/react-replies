@@ -10,15 +10,15 @@ const socket = require("socket.io");
 const app = express();
 require("dotenv").config();
 
-const corsOptions = {
-  origin: [
-    "https://react-replies-frontend.onrender.com",
-    "http://localhost:3000",
-  ],
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: [
+//     "https://react-replies-frontend.onrender.com",
+//     "http://localhost:3000",
+//   ],
+//   credentials: true,
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 // app.use(cors());
 app.use(express.json());
