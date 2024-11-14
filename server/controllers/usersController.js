@@ -78,3 +78,23 @@ module.exports.getAllUsers = async (req, res, next) => {
     next(ex);
   }
 };
+
+
+module.exports.getOneUser= async (req, res,next) => {
+  try {
+    const {email}= req.body
+    const user= await User.findOne({email})
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    console.log(user)
+
+    return res.json({ status: true, user });
+
+  } catch (ex) {
+    next(ex)
+
+  }
+}
