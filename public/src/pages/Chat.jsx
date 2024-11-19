@@ -7,6 +7,7 @@ import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
 import { io } from "socket.io-client";
+import Logout from "../components/Logout";
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -55,6 +56,16 @@ export default function Chat() {
   };
   return (
     <Container>
+      <div
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+          padding: "10px", // optional for spacing
+        }}
+      >
+        <Logout />
+      </div>
       <div className="container">
         <Contacts
           contacts={contacts}
@@ -64,7 +75,11 @@ export default function Chat() {
         {currentChat === undefined ? (
           <Welcome currentUser={currentUser} />
         ) : (
-          <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} />
+          <ChatContainer
+            currentChat={currentChat}
+            currentUser={currentUser}
+            socket={socket}
+          />
         )}
       </div>
     </Container>

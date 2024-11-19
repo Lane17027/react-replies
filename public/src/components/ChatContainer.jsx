@@ -74,6 +74,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
   return (
     <>
       {currentChat && (
@@ -90,7 +91,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
                 <h3>{currentChat.username}</h3>
               </div>
             </div>
-            <Logout />
+            {/* <Logout /> */}
           </div>
           <div className="chat-messages">
             {messages.map((message, index) => (
