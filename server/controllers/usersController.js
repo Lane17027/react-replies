@@ -52,10 +52,21 @@ module.exports.setAvatar = async (req, res, next) => {
   try {
     const userId = req.params.id;
     const avatarImage = req.body.image;
-    const userData = await User.findByIdAndUpdate(userId, {
-      isAvatarImageSet: true,
-      avatarImage,
-    });
+
+    // Step 1: Find the user by ID
+    const userData = await User.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Step 2: Update the user's avatar image and set the flag
+    userData.isAvatarImageSet = true;
+    userData.avatarImage = avatarImage;
+
+    // Step 3: Save the updated user data
+    await userData.save();
+
+    // Respond with the updated data
     return res.json({
       isSet: userData.isAvatarImageSet,
       image: userData.avatarImage,
